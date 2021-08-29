@@ -1,0 +1,11 @@
+.cursor-pointer:hover{
+    cursor: pointer;
+}
+.bootstrap-tagsinput{
+    width: 100%;
+}
+.bootstrap-tagsinput .tag{
+    background-color: #0dcaf0;
+    border-radius: 5px;
+    padding: 2px 5px;
+}

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="{{lang}}">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{__ "userCollections"}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/darkStyle.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+</head>
+<body> 
+    {{> menu }}
+    {{#if message}}
+        <div class="container alert alert-primary alert-dismissible fade show mb-0 border" role="alert">
+            <strong>{{message}}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {{/if}}
+    <div class="container bg-light rounded-3 pt-2 pb-2">
+        {{#if pageOwnerInfo.user}}
+            <div class="d-flex align-self-center  mb-2">
+                <div class="me-2">
+                    <span class="fs-4">{{pageOwnerInfo.user.name}}&nbsp;<span style="text-transform:lowercase;">{{__ "collections"}}</span></span>
+                </div>
+                {{#if loginedUser.logined}}
+                    {{#if_user_eq pageOwnerInfo.user.id loginedUser.userInfo}}
+                        <div>
+                            <button type="button" class="darkmode-color btn btn-outline-success btn-sm fs-6 d-box shadow-none" data-bs-toggle="modal" data-bs-target="#newCollection">{{__ "createCollection"}}</button>
+                        </div>
+                        <div class="modal fade" id="newCollection" tabindex="-1" aria-labelledby="newCollectionLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="newCollectionLabel">{{__ "newCollection"}}</h5>
+                                    </div>
+                                    <div class="modal-body overflow-auto container">
+                                        <form id="collectionForm" method="POST" action="/newcollection?user_id={{pageOwnerInfo.user.id}}" reload='/user?id={{pageOwnerInfo.user.id}}'>
+                                            <div class="mb-3">
+                                                <label for="newCollectionName" class="form-label">{{__ "collectionName"}}</label>
+                                                <input name="name" type="name" class="form-control" id="newCollectionName" autocomplete="off">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="newCollectionDescription" class="form-label">{{__ "collectionDescription"}}</label>
+                                                <textarea name="description" class="form-control" id="newCollectionDescription" style="background-color: aliceblue;"></textarea>
+                                                <script>
+                                                    let simplemde = new SimpleMDE({ 
+                                                        spellChecker: false,
+                                                        element: document.getElementById("newCollectionDescription"),
+                                                        status: false});
+                                                </script>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="newCollectionTheme" class="form-label">{{__ "theme"}}</label>
+                                                <select name="theme" id="newCollectionTheme" class="form-select">
+                                                    <option value="1">{{__ "books"}}</option>
+                                                    <option value="2">{{__ "stamps"}}</option>
+                                                    <option value="3">{{__ "icons"}}</option>
+                                                    <option value="4">{{__ "whiskey"}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="newCollectionImg" class="form-label">{{__ "collectionPicture"}}</label>
+                                                <input name="img" type="file" accept="image/jpeg,image/png" class="form-control" id="newCollectionImg">
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="darkmode-color btn btn-outline-success shadow-none" data-bs-dismiss="modal">{{__ "close"}}</button>
+                                        <button form="collectionForm" type="submit" class="darkmode-color btn btn-outline-success shadow-none">{{__ "createCollection"}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {{/if_user_eq}}
+                {{/if}}
+            </div>
+            {{#if pageOwnerInfo.collections}}
+                <div class="row">
+                    <div class="col-12 overflow-auto">
+                        <table class="table table-light table-striped text-center">
+                            <thead>
+                                <tr>
+                                    <th scope="col">№</th>
+                                    <th scope="col">{{__ "collectionName"}}</th>
+                                    <th scope="col">{{__ "theme"}}</th>
+                                    {{#if loginedUser.logined}}
+                                        {{#if_user_eq pageOwnerInfo.user.id loginedUser.userInfo}}
+                                            <th scope="col"></th>
+                                        {{/if_user_eq}}
+                                    {{/if}}  
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each pageOwnerInfo.collections}}
+                                    <tr class="cursor-pointer">
+                                        <td onclick="window.location='/collection?id={{this.id}}'">{{sum @index 1}}</td>
+                                        <td onclick="window.location='/collection?id={{this.id}}'">{{this.name}}</td>
+                                        <td onclick="window.location='/collection?id={{this.id}}'">{{theme this.theme_id}}</td>
+                                        {{#if ../loginedUser.logined}}
+                                            {{#if_user_eq ../pageOwnerInfo.user.id ../loginedUser.userInfo}}
+                                                <td>
+                                                    <div class="d-flex align-items-center justify-content-center">
+                                                        <button type="button" class="btn btn-outline-success btn-sm ms-1 me-1 shadow-none darkmode-castom-color" onclick="window.location='/edit_collection?col_id={{this.id}}'">{{__ "edit"}}</button>
+                                                        <button type="button" class="btn btn-outline-danger btn-sm me-1 shadow-none darkmode-castom-color" onclick="window.location='/delete_collection?col_id={{this.id}}'">X</button>
+                                                    </div>
+                                                </td>
+                                            {{/if_user_eq}}
+                                        {{/if}}
+                                    </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {{else}}
+                <div class="row">
+                    <div class="col-12 fs-5 text-center mt-5 mb-5">
+                        {{__ "nullCollections"}}
+                    </div>
+                </div>
+            {{/if}}
+        {{else}}
+            <div class="row">
+                <div class="col-12 fs-5 text-center mt-5 mb-5">
+                    {{__ "nullUser"}}
+                </div>
+            </div>
+        {{/if}}
+    </div>
+    <script src="js/cloudinaryUploadClient.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

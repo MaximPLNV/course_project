@@ -1,0 +1,42 @@
+.darkmode--activated{
+    background-color: rgb(43, 43, 43);
+    color: rgb(255, 255, 255);
+}
+
+.darkmode--activated .bg-light{
+    background-color: rgb(77, 77, 77)!important;
+}
+
+.darkmode--activated .table-light {
+    --bs-table-bg: rgb(139, 139, 139);
+    --bs-table-striped-bg: rgb(177, 177, 177);
+    --bs-table-striped-color: rgb(255, 255, 255);
+    color: rgb(255, 255, 255);
+    border-color: rgb(43, 43, 43);
+}
+
+.darkmode--activated .navbar-light .navbar-nav .nav-link{
+    color:rgb(255, 255, 255);
+}
+
+.darkmode--activated .navbar-light .navbar-toggler{
+    color: rgb(255, 255, 255, 0.6);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.darkmode--activated form .btn-outline-success, .darkmode--activated .darkmode-color, .darkmode--activated .darkmode-castom-color{
+    color: #ffffff;
+    border-color: #ffffff;
+}
+
+.darkmode--activated form .btn-outline-success:hover, .darkmode--activated .darkmode-color:hover, .editor-toolbar{
+    background-color: #ffffff;
+    color: black;
+    opacity: 1;
+}
+
+.darkmode--activated .modal-content{
+    background-color: rgb(43, 43, 43);
+    border-color: #ffffff;
+
+}

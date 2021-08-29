@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="{{lang}}">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{collection.name}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/bootstrap.tagsinput/0.8.0/bootstrap-tagsinput.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <link href="css/darkStyle.css" rel="stylesheet">
+</head>
+<body>
+    {{> menu }}
+    {{#if message}}
+        <div class="container alert alert-primary alert-dismissible fade show mb-0 border" role="alert">
+            <strong>{{message}}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {{/if}}
+    <div class="container bg-light rounded-3 pt-2 pb-2">
+        {{#if collection}}
+            <div class="row">
+                <div class="d-flex align-self-center  mb-2">
+                    <div class="me-2">
+                        <span class="fs-4">{{collection.name}}</span>
+                    </div>
+                    {{#if loginedUser.logined}}
+                        {{#if_user_eq owner.user_id loginedUser.userInfo}}
+                            <div>
+                                <button type="button" class="darkmode-color btn btn-outline-success btn-sm fs-6 d-box shadow-none" data-bs-toggle="modal" data-bs-target="#newItem">{{__ "createItem"}}</button>
+                            </div>
+
+                            <div class="modal fade" id="newItem" tabindex="-1" aria-labelledby="newItemLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="newCollectionLabel">{{__ "newItem"}}</h5>
+                                        </div>
+                                        <div class="modal-body overflow-auto container">
+                                            <form id="collectionForm" method="POST" action="/new_item?col_id={{collection.id}}">
+                                                <div class="mb-3">
+                                                    <label for="newIthemName" class="form-label">{{__ "itemName"}}</label>
+                                                    <input name="name" type="name" class="form-control" id="newItemName" autocomplete="off">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="bootstrap-tagsinput" class="form-label">{{__ "itemTags"}}</label>
+                                                    <input name="tags" type="text" class="form-control" id="newTagsName" autocomplete="off" data-role="tagsinput">
+                                                </div>   
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="darkmode-color btn btn-outline-success shadow-none" data-bs-dismiss="modal">{{__ "close"}}</button>
+                                            <button form="collectionForm" type="submit" class="darkmode-color btn btn-outline-success shadow-none">{{__ "createItem"}}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {{/if_user_eq}}
+                    {{/if}}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-3">
+                    <img src="{{collection.img_link}}" class="rounded float-start w-100 me-2" alt="...">
+                </div>
+                <div class="col-9" style="text-align: justify;">
+                    {{{markdown collection.description}}}
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-12 fs-5">
+                    {{__ "theme"}}:&nbsp;<span style="text-transform:lowercase;">{{theme collection.theme_id}}</span>
+                </div>
+            </div>
+            {{#if items}}
+                <div class="row">
+                    <div class="col-12 overflow-auto">
+                        <table class="table table-light table-striped text-center">
+                            <thead>
+                                <tr>
+                                    <th scope="col">№</th>
+                                    <th scope="col">{{__ "ID"}}</th>
+                                    <th scope="col">{{__ "itemName"}}</th>
+                                    <th scope="col">{{__ "itemTags"}}</th>
+                                    <th scope="col">{{__ "likes"}}</th>
+                                    {{#if loginedUser.logined}}
+                                        {{#if_user_eq owner.user_id loginedUser.userInfo}}
+                                            <th scope="col"></th>
+                                        {{/if_user_eq}}
+                                    {{/if}}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each items}}
+                                    <tr class="cursor-pointer">
+                                        <td onclick="window.location='/item?id={{this.id}}'">{{sum @index 1}}</td>
+                                        <td onclick="window.location='/item?id={{this.id}}'">{{this.id}}</td>
+                                        <td onclick="window.location='/item?id={{this.id}}'">{{this.name}}</td>
+                                        <td onclick="window.location='/item?id={{this.id}}'">{{#if this.tags}}{{this.tags}}{{else}}{{__ "none"}}{{/if}}</td>
+                                        <td onclick="window.location='/item?id={{this.id}}'">{{this.likes}}</td>
+                                        {{#if ../loginedUser.logined}}
+                                            {{#if_user_eq ../owner.user_id ../loginedUser.userInfo}}
+                                                <td>
+                                                    <div class="d-flex align-items-center justify-content-center">
+                                                        <button type="button" class="btn btn-outline-success btn-sm ms-1 me-1 darkmode-castom-color shadow-none" onclick="window.location='/edit_item?id={{this.id}}'">{{__ "edit"}}</button>
+                                                        <button type="button" class="btn btn-outline-danger btn-sm me-1 darkmode-castom-color shadow-none" onclick="window.location='/delete_item?id={{this.id}}'">X</button>
+                                                    </div>
+                                                </td>
+                                            {{/if_user_eq}}
+                                        {{/if}}
+                                    </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            {{else}}
+                <div class="row">
+                    <div class="col-12 fs-5 text-center mt-5 mb-5">
+                        {{__ "nullItems"}}
+                    </div>
+                </div>
+            {{/if}}
+        {{else}}
+            <div class="row">
+                <div class="col-12 fs-5 text-center mt-5 mb-5">
+                    {{__ "nullCollection"}}
+                </div>
+            </div>
+        {{/if}}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/bootstrap.tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
+</body>
+</html>

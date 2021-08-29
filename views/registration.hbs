@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="{{lang}}">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{__ 'registration'}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/darkStyle.css" rel="stylesheet">
+</head>
+<body>
+    {{> menu }}
+    <div class="container bg-light rounded-3 pt-5 pb-5">
+        <div class="d-flex justify-content-center">
+            <div>
+                <form method="POST">
+                    <div class="mb-3 pb-1 text-center border-bottom">
+                        <span class="fs-3">{{__ 'registration'}}</span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="InputName" class="form-label">{{__ 'nickname'}}</label>
+                        <input name="name" type="name" class="form-control" id="InputName" autocomplete="off">
+                    </div>
+                    <div class="mb-3">
+                        <label for="InputEmail" class="form-label">{{__ 'email'}}</label>
+                        <input name="email" type="email" class="form-control" id="InputEmail" aria-describedby="emailHelp" autocomplete="off">
+                    </div>
+                    <div class="mb-2">
+                        <label for="InputPassword" class="form-label">{{__ 'password'}}</label>
+                        <input name="password" type="password" class="form-control" id="InputPassword" autocomplete="off">
+                    </div>
+                    <div class="mb-2">
+                        <label for="InputRepeatPassword" class="form-label">{{__ 'repeatPassword'}}</label>
+                        <input name="repeatPassword" type="password" class="form-control" id="InputRepeatPassword" autocomplete="off">
+                    </div>
+                    <button type="submit" class="btn btn-outline-success w-100 mt-3">{{__ 'registration'}}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{#if message}}
+        <div class="container alert alert-primary alert-dismissible fade show mb-0 border" role="alert">
+            <strong>{{message}}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {{/if}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

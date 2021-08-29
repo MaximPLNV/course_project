@@ -1,0 +1,103 @@
+<script src="https://cdn.jsdelivr.net/npm/darkmode-js@1.5.7/lib/darkmode-js.min.js"></script>
+<header class="mb-5">
+    <script>
+        let drkmode = new Darkmode();
+        let active;
+        let unactive;
+        document.getElementsByClassName("darkmode-background")[0].remove();
+        document.getElementsByClassName("darkmode-layer")[0].remove();
+
+        function buttonsControl(active, unactive){
+            document.getElementById(active).setAttribute('disabled', 'true');
+            document.getElementById(unactive).removeAttribute('disabled');
+        }
+
+        function modeBtnsRender(){
+            if(drkmode.isActivated()){
+                active = 'darkBtn';
+                unactive = 'lightBtn';
+            } else {
+                active = 'lightBtn';
+                unactive = 'darkBtn';
+            }
+            buttonsControl(active, unactive);
+        }
+
+        function lngBtnsRender(){
+            if(document.getElementsByTagName('html')[0].getAttribute('lang')=='en'){
+                active = 'enBtn';
+                unactive = 'ruBtn';
+            } else {
+                active = 'ruBtn';
+                unactive = 'enBtn';
+            }
+            buttonsControl(active, unactive);
+        }
+
+        function toggle(darkmode){
+            darkmode.toggle();
+            modeBtnsRender();
+        };
+    </script>
+    <nav class="navbar navbar-expand-md navbar-light bg-light rounded-bottom">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">{{__ 'home'}}</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {{__ 'settings'}}
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li>
+                                <span class="dropdown-item" >{{__ 'lang'}}:
+                                    <button id='enBtn' onclick="window.location='/languageupdate?lg=en';" type="button" class="btn btn-outline-success btn-sm ms-1 me-1">{{__ 'eng'}}</button>
+                                    <button id='ruBtn' onclick="window.location='/languageupdate?lg=ru';" type="button" class="btn btn-outline-success btn-sm me-1">{{__ 'rus'}}</button>
+                                </span>
+                            </li>
+                            <li>
+                                <span class="dropdown-item" >{{__ 'mode'}}:
+                                    <button id="lightBtn" onclick="toggle(drkmode);" type="button" class="btn btn-outline-success btn-sm ms-1 me-1">{{__ 'light'}}</button>
+                                    <button id="darkBtn" onclick="toggle(drkmode);" type="button" class="btn btn-outline-success btn-sm me-1">{{__ 'dark'}}</button>
+                                    <script>
+                                        modeBtnsRender();
+                                        lngBtnsRender();
+                                    </script>
+                                </span>
+                            </li>
+                        </ul>
+                    </li>
+                    {{#if loginedUser.logined}}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/user?id={{loginedUser.userInfo.id}}">{{loginedUser.userInfo.name}}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout">{{__ 'logout'}}</a>
+                        </li>
+                    {{else}}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">{{__ 'login'}}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/registration">{{__ 'registration'}}</a>
+                        </li>
+                    {{/if}}
+                    {{#if loginedUser.userInfo.adminLvl}}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin">{{__ 'adminPan'}}</a>
+                        </li>
+                    {{/if}}
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" aria-label="Search">
+                    <button class="btn btn-outline-success shadow-none" type="submit">{{__ 'search'}}</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+</header>
